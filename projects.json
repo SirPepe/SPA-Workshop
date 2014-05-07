@@ -1,0 +1,22 @@
+[
+    {
+        "id": 0,
+        "title": "Skalarhaubitzen-Entwicklung",
+        "customer": "Stark Industries"
+    },
+    {
+        "id": 1,
+        "title": "Bubastis",
+        "customer": "Veidt Enterprises"
+    },
+    {
+        "id": 2,
+        "title": "Replikanten-Wartung",
+        "customer": "Tyrell Corporation"
+    },
+    {
+        "id": 3,
+        "title": "Zeiterfassungs-Tool",
+        "customer": "Weyland-Yutani Corporation"
+    }
+]
