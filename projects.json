@@ -1,22 +1,32 @@
 [
     {
-        "id": 0,
+        "_id": 1,
         "title": "Skalarhaubitzen-Entwicklung",
-        "customer": "Stark Industries"
+        "client": "Stark Industries"
     },
     {
-        "id": 1,
-        "title": "Bubastis",
-        "customer": "Veidt Enterprises"
+        "_id": 2,
+        "title": "Bubastis klonen",
+        "client": "Veidt Enterprises"
     },
     {
-        "id": 2,
+        "_id": 3,
         "title": "Replikanten-Wartung",
-        "customer": "Tyrell Corporation"
+        "client": "Tyrell Corporation"
     },
     {
-        "id": 3,
+        "_id": 4,
         "title": "Zeiterfassungs-Tool",
-        "customer": "Weyland-Yutani Corporation"
+        "client": "Weyland-Yutani Corporation"
+    },
+    {
+        "_id": 5,
+        "title": "Wartung der Reichsflugscheiben",
+        "client": "Stark Industries"
+    },
+    {
+        "_id": 6,
+        "title": "Xenomorph flauschen",
+        "client": "Weyland-Yutani Corporation"
     }
 ]
