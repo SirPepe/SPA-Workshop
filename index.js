@@ -1,28 +1,154 @@
-var restify = require('restify');
 var fs = require('fs');
+var async = require('async');
+var restify = require('restify');
 var server = restify.createServer();
+var NeDB = require('nedb');
 
 
-// Statische Fake-Daten für Projekte und Personen
-function sendJSON(filename){
-  return function(req, res, next){
-    fs.readFile(filename, { encoding: 'utf-8' }, function(err, data){
-      if(err) throw err;
-      res.send(JSON.parse(data));
+var projectsDb = new NeDB();
+var employeesDb = new NeDB();
+var workitemsDb = new NeDB();
+
+
+server.pre(restify.pre.userAgentConnection());
+server.use(restify.acceptParser(server.acceptable));
+server.use(restify.bodyParser());
+server.use(restify.queryParser());
+
+
+// Statische Fake-Daten um z.B. projects und employees importieren
+function importData(db, sourcefile, done){
+  fs.readFile(sourcefile, { encoding: 'utf-8' }, function(err, json){
+    var data = JSON.parse(json);
+    if(err) throw err;
+    db.insert(data, done);
+  });
+}
+
+function getMultiHandler(req, res, next, err, doc){
+  if(err){
+    res.send(500, err);
+  }
+  else {
+    if(doc.length === 0 && Object.keys(req.query).length > 0){
+      res.send(404, new Error('Not found'));
+    }
+    else {
+      res.send(200, doc);
+    }
+  }
+  return next();
+}
+
+function getSingleHandler(req, res, next, err, doc){
+  if(err){
+    res.send(500, err);
+  }
+  if(doc){
+    res.send(200, doc);
+  }
+  else {
+    res.send(404, new Error('Not found'));
+  }
+  return next();
+}
+
+
+// Validierung
+function defined(value){
+  return (typeof value !== 'undefined' && value !== null);
+}
+function validate(doc){
+  var errors = [];
+  if(!defined(doc.project_id)){
+    errors.push({ project_id: 'missing' });
+  }
+  if(!defined(doc.employee_id)){
+    errors.push({ employee_id: 'missing' });
+  }
+  if(!defined(doc.start_date)){
+    errors.push({ start_date: 'missing' });
+  }
+  if(!defined(doc.time)){
+    errors.push({ time: 'missing' });
+  }
+  if(!defined(doc.phase)){
+    errors.push({ phase: 'missing' });
+  }
+  if(!defined(doc.contract)){
+    errors.push({ contract: 'missing' });
+  }
+  return errors;
+}
+
+
+async.parallel([
+  importData.bind(null, projectsDb, 'projects.json'),
+  importData.bind(null, employeesDb, 'employees.json')
+], function(){
+
+
+  // Alle: GET /employees
+  // Mit der _id 9gvng258WrwAAcnt: GET /employees?_id=9gvng258WrwAAcnt
+  // Mit einer bestimmten E-Mail-Adresse: employees?email=foo@bar.de
+  server.get('/employees', function(req, res, next){
+    employeesDb.find(req.query, getMultiHandler.bind(null, req, res, next));
+  });
+
+  server.get('/employees/:_id', function(req, res, next){
+    employeesDb.find({ _id: req.params._id },
+      getSingleHandler.bind(null, req, res, next));
+  });
+
+  server.get('/projects', function(req, res, next){
+    projectsDb.find(req.query, getMultiHandler.bind(null, req, res, next));
+  });
+
+  server.get('/projects/:_id', function(req, res, next){
+    projectsDb.find({ _id: req.params._id },
+      getSingleHandler.bind(null, req, res, next));
+  });
+
+  server.get('/workitems', function(req, res, next){
+    workitemsDb.find(req.query, getMultiHandler.bind(null, req, res, next));
+  });
+
+  server.get('/workitems/:_id', function(req, res, next){
+    workitemsDb.find({ _id: req.params._id },
+      getSingleHandler.bind(null, req, res, next));
+  });
+
+  server.post('/workitems', function(req, res, next){
+    var doc = req.body;
+    var errors = validate(doc);
+    if(errors.length > 0) res.send(400, { 'invalid': errors });
+    workitemsDb.insert(doc, function(err, newDoc){
+      if(err) res.send(500, err);
+      res.send(201, newDoc);
       return next();
     });
-  };
-}
-server.get('/projects', sendJSON('projects.json'));
-server.get('/employees', sendJSON('employees.json'));
+  });
 
+  server.patch('/workitems/:_id', function(req, res, next){
+    var update = req.body;
+    var errors = validate(update);
+    if(errors.length > 0) res.send(400, { 'invalid': errors });
+    workitemsDb.update({ _id: req.params._id }, update, {}, function(err, num, doc){
+      res.send(doc);
+      return next();
+    });
+  });
 
-// Tatsächliche REST-API
-server.get('/items', function(req, res, next){});
-server.post('/items', function(req, res, next){});
-server.get('/items/:id', function(req, res, next){});
-server.patch('/items/:id', function(req, res, next){});
-server.del('/items/:id', function(req, res, next){});
+  server.del('/workitems/:_id', function(req, res, next){
+    workitemsDb.remove({ _id: req.params._id }, {}, function(err, num){
+      console.log(err, num, req.params);
+      if(err) res.send(500, err);
+      res.send(200, num);
+      return next();
+    });
+  });
+
+});
 
 
 server.listen(1337, function(){
