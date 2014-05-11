@@ -10,6 +10,7 @@ var employeesDb = new NeDB();
 var workitemsDb = new NeDB();
 
 
+server.use(restify.CORS());
 server.pre(restify.pre.userAgentConnection());
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.bodyParser());
@@ -66,6 +67,9 @@ function validate(doc){
   if(!defined(doc.employee_id)){
     errors.push({ employee_id: 'missing' });
   }
+  if(!defined(doc.description)){
+    errors.push({ description: 'missing' });
+  }
   if(!defined(doc.start_date)){
     errors.push({ start_date: 'missing' });
   }
@@ -121,9 +125,15 @@ async.parallel([
   server.post('/workitems', function(req, res, next){
     var doc = req.body;
     var errors = validate(doc);
-    if(errors.length > 0) res.send(400, { 'invalid': errors });
+    if(errors.length > 0){
+      res.send(400, { 'invalid': errors });
+      console.log('Fehler 400:', errors);
+    }
     workitemsDb.insert(doc, function(err, newDoc){
-      if(err) res.send(500, err);
+      if(err){
+        res.send(500, err);
+        console.log('Fehler 500: ', err);
+      }
       res.send(201, newDoc);
       return next();
     });
@@ -132,7 +142,10 @@ async.parallel([
   server.patch('/workitems/:_id', function(req, res, next){
     var update = req.body;
     var errors = validate(update);
-    if(errors.length > 0) res.send(400, { 'invalid': errors });
+    if(errors.length > 0){
+      res.send(400, { 'invalid': errors });
+      console.log('Fehler 400:', errors);
+    }
     workitemsDb.update({ _id: req.params._id }, update, {}, function(err, num, doc){
       res.send(doc);
       return next();
@@ -141,8 +154,10 @@ async.parallel([
 
   server.del('/workitems/:_id', function(req, res, next){
     workitemsDb.remove({ _id: req.params._id }, {}, function(err, num){
-      console.log(err, num, req.params);
-      if(err) res.send(500, err);
+      if(err){
+        res.send(500, err);
+        console.log('Fehler 500: ', err);
+      }
       res.send(200, num);
       return next();
     });
