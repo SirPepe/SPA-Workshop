@@ -1,9 +1,9 @@
-Single Page Application Workshop REST Server
+Single Page Application Workshop
 ============================================
 
-Setup:
+Setup Server:
 
-    git clone https://github.com/SirPepe/SPAWRS.git
-    cd SPAWRS
+    git clone https://github.com/SirPepe/SPAWS.git
+    cd SPAWS
     npm install
-    node index.js
+    node server/index.js

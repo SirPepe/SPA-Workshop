@@ -20,8 +20,10 @@ server.use(restify.queryParser());
 // Statische Fake-Daten um z.B. projects und employees importieren
 function importData(db, sourcefile, done){
   fs.readFile(sourcefile, { encoding: 'utf-8' }, function(err, json){
+    if(err){
+      throw err;
+    }
     var data = JSON.parse(json);
-    if(err) throw err;
     db.insert(data, done);
   });
 }
@@ -31,12 +33,7 @@ function getMultiHandler(req, res, next, err, doc){
     res.send(500, err);
   }
   else {
-    if(doc.length === 0 && Object.keys(req.query).length > 0){
-      res.send(404, new Error('Not found'));
-    }
-    else {
-      res.send(200, doc);
-    }
+    res.send(200, doc);
   }
   return next();
 }
@@ -45,8 +42,8 @@ function getSingleHandler(req, res, next, err, doc){
   if(err){
     res.send(500, err);
   }
-  if(doc){
-    res.send(200, doc);
+  if(doc && doc.length > 0){
+    res.send(200, doc[0]);
   }
   else {
     res.send(404, new Error('Not found'));
@@ -87,8 +84,8 @@ function validate(doc){
 
 
 async.parallel([
-  importData.bind(null, projectsDb, 'projects.json'),
-  importData.bind(null, employeesDb, 'employees.json')
+  importData.bind(null, projectsDb, __dirname + '/projects.json'),
+  importData.bind(null, employeesDb, __dirname + '/employees.json')
 ], function(){
 
 
@@ -147,7 +144,11 @@ async.parallel([
       console.log('Fehler 400:', errors);
     }
     workitemsDb.update({ _id: req.params._id }, update, {}, function(err, num, doc){
-      res.send(doc);
+      if(err){
+        res.send(500, err);
+        console.log('Fehler 500: ', err);
+      }
+      res.send('Ok');
       return next();
     });
   });
