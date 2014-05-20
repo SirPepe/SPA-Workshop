@@ -88,7 +88,7 @@ async.parallel([
   importData.bind(null, employeesDb, __dirname + '/employees.json')
 ], function(){
 
-  server.get('/echo/:value', function(req, res, next){
+  server.get('/echo', function(req, res, next){
     res.send({ echo: req.params.value });
     next();
   });
