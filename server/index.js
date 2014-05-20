@@ -88,10 +88,6 @@ async.parallel([
   importData.bind(null, employeesDb, __dirname + '/employees.json')
 ], function(){
 
-
-  // Alle: GET /employees
-  // Mit der _id 9gvng258WrwAAcnt: GET /employees?_id=9gvng258WrwAAcnt
-  // Mit einer bestimmten E-Mail-Adresse: employees?email=foo@bar.de
   server.get('/employees', function(req, res, next){
     employeesDb.find(req.query, getMultiHandler.bind(null, req, res, next));
   });
