@@ -88,6 +88,11 @@ async.parallel([
   importData.bind(null, employeesDb, __dirname + '/employees.json')
 ], function(){
 
+  server.get('/echo/:value', function(req, res, next){
+    res.send({ echo: req.params.value });
+    next();
+  });
+
   server.get('/employees', function(req, res, next){
     employeesDb.find(req.query, getMultiHandler.bind(null, req, res, next));
   });
