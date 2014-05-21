@@ -9,6 +9,8 @@
   "author": "peter@peterkroener.de",
   "license": "MIT",
   "dependencies": {
+    "async": "^0.9.0",
+    "nedb": "^0.10.5",
     "restify": "^2.7.0"
   }
 }
