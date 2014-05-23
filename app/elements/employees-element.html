@@ -19,8 +19,9 @@
   <script>
     Polymer('employees-element', {
       selectEmployee: function(e, detail, sender) {
-        var employee = e.templateInstance.model['_id'];
-        alert("E: " + employee['_id']);
+        var employee = e.target.templateInstance.model.e;
+        console.log("Clicked " + employee._id)
+        alert("E: " + employee._id);
       },
 
       // element is fully prepared
