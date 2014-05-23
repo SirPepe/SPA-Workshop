@@ -1,0 +1,52 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<polymer-element name="formular-module"  attributes="project employee">
+<template>
+    <style>
+      /* styles for the custom element itself - lowest specificity */
+      :host { display: block; }
+      /*
+      style if an ancestor has the different class
+      :host(.different) { }
+      */
+  </style>
+
+
+  <core-ajax auto
+  id="itemsAjax"
+  method="POST"
+  url="http://127.0.0.1:1337/workitems"
+  body='{"project_id": "{{project}}", "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}",
+  "phase": "{{phase}}", "contract": "{{contract}}"}'
+handleAs="json"
+response="{{response}}"
+contentType="application/json">
+</core-ajax>
+</template>
+<script>
+    Polymer('formular-module', {
+        project: '0',
+        employee: '0',
+        description: 'hallo',
+        start_date: '23.05.14',
+        time: '5,0',
+        phase: '1',
+        contract: 'A',
+
+      // element is fully prepared
+      ready: function(){ },
+      // instance of the element is created
+      created: function() {  },
+      // instance was inserted into the document
+      enteredView: function() { },
+      // instance was removed from the document
+      leftView: function() { },
+      // attribute added, removed or updated
+
+       valueChanged: function(oldVal,newVal){
+        console.info('Old: ',oldVal);
+        console.info('New: ',newVal);
+      }
+  });
+</script>
+</polymer-element>
