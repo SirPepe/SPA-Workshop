@@ -1,0 +1,14 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+
+<polymer-element name="render-employee" attributes="employee">
+  <template>
+    <span>{{employee.name}}: {{employee.email}}</span>
+  </template>
+  <script>
+    Polymer('render-employee', {
+      ready: function() {
+      }
+    });
+  </script>
+</polymer-element>
