@@ -1,0 +1,59 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="modal-dialog" constructor="ModalDialog" attributes="visible title">
+  <template>
+    <style>
+        /* styles for the custom element itself - lowest specificity */
+        :host {
+            display: none;
+            min-width: 400px;
+            min-height: 200px;
+            background-color: yellow;
+            margin: 50px;
+        }
+        :host div.modal-dialog-title {
+            display: block;
+            background-color: gray;
+            color: white;
+            padding: 8px 12px;
+        }
+        :host a.modal-dialog-close {
+            display: block;
+            float: right;
+            cursor: pointer;
+        }
+      /*
+      style if an ancestor has the different class
+      :host(.different) { }
+      */
+    </style>
+    <div id="title" class="modal-dialog-title">
+        {{title}}
+        <a id="close" class="modal-dialog-close">✖</a>
+    </div>
+    <div id="content" class="modal-dialog-content"></div>
+  </template>
+  <script>
+    Polymer('modal-dialog', {
+
+        visible: false,
+
+        ready: function() {
+            this.$.content.innerHTML = this.innerHTML;
+            var self = this;
+            this.$.close.addEventListener('click', function(e) {
+                self.visible = false;
+            });
+        },
+
+        visibleChanged: function(oldVal, newVal) {
+            if(newVal) {
+                this.style.display = "block";
+            }
+            else {
+                this.style.display = "none";
+            }
+        }
+    });
+  </script>
+</polymer-element>
