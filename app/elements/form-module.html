@@ -3,65 +3,111 @@
 
 <polymer-element name="form-module"  attributes="project employee">
   <template>
+  <style>
+      /* styles for the custom element itself - lowest specificity */
+      :host { display: block; }
+      /*
+      style if an ancestor has the different class
+      :host(.different) { }
+      */
+     .form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #555555;
+    vertical-align: middle;
+    background-color: white;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  }
+
+  .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+    line-height: 1.33;
+    border-radius: 6px;
+    color: white;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+  }
+
+  label {
+    font-weight: 700;
+    margin-top: 20px;
+    display: block;
+  }
+
+  textarea {
+    height: 200px;
+  }
+
+  </style>
 <div class="container">
     <h1>Formular</h1>
     <hr>
 
     <div class="row">
-        <form on-submit="{{submitMe}}" class="form-horizontal" role="form">
+        <form class="form-horizontal" role="form">
             <div class="form-group">
                 <label class="col-lg-3 control-label">Start Date:</label>
+                <input class="form-control" type="text" value="{{start_date}}">
 
-                <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{start_date}}">
-                </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Time:</label>
-
-                <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{time}}">
-                </div>
+                <input class="form-control" type="text" value="{{time}}">
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Phase:</label>
-
-                <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{phase}}">
-                </div>
+                <input class="form-control" type="text" value="{{phase}}">
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Contract:</label>
-
-                <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{contract}}">
-                </div>
+                <input class="form-control" type="text" value="{{contract}}">
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Description:</label>
-
-                <div class="col-lg-8">
-                    <textarea class="form-control">{{description}}</textarea>
-                </div>
+                <textarea rows="4" class="form-control">{{description}}</textarea>
             </div>
-            <p><input type="submit" value="Post" /></p>
+            <p><input on-click="{{submitMe}}" class="btn" type="button" value="Form abschicken" /></p>
         </form>
 
     </div>
 </div>
-<core-ajax id="ac"
+<core-ajax
+    id="ac"
     method="POST"
     url="http://127.0.0.1:1337/workitems"
     body='{"project_id": "{{project}}", "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": "{{contract}}"}'
-  handleAs="json"
-  content-type="application/json"
-  on-core-response="{{handleResponse}}"
-  response="{{response}}">
+    handleAs="json"
+    contentType="application/json"
+    on-core-response="{{handleResponse}}"
+    response="{{response}}">
 </core-ajax>
 
   </template>
   <script>
+      var d = new Date();
     Polymer('form-module', {
+
+    start_date: d.toLocaleDateString(),
+    project_id: '1',
+    employee_id: '1',
+    description: 'hello world',
+    time: d.toLocaleTimeString(),
+    phase: 'test',
+    contract: 'test',
+
+
+
       // element is fully prepared
       ready: function(){ },
       // instance of the element is created
@@ -73,7 +119,6 @@
       // attribute added, removed or updated
       // attributeChanged: function(attrName, oldVal, newVal) { },
       submitMe: function(event, detail, sender) {
-            console.log(event);
             this.$.ac.go();
       }
     });
