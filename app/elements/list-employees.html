@@ -2,23 +2,40 @@
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="render-employee.html">
 
-<polymer-element name="list-employees" attributes="url">
+<polymer-element name="list-employees" attributes="url reversed">
   <template>
     <core-ajax auto 
 	id="AjaxTag"
 	url="{{url}}"
-	handleAs="json"
-	response="{{employees}}" />  
+	handleAs="json" />  
     <ul>
       <template repeat="{{e in employees}}">
         <li><render-employee employee="{{e}}"></render-employee></li>
       </template>
-    </ul>	
+    </ul>
   </template>
   <script>
     Polymer('list-employees', {
-      ready: function() {
-      }
+		ready: function() {
+		this.employees = [];
+		},
+		observe: {
+			'$.AjaxTag.response': 'triggerResponseChange'
+		},
+		triggerResponseChange: function(oldVal, newVal) {
+		  if (newVal == null)
+		  {
+			return;
+		  }
+		  if (this.reversed == 'true')
+		  {
+			this.employees = newVal.reverse();
+		  }
+		  else
+		  {
+			this.employees =newVal;
+		  }
+		}
     });
   </script>
 </polymer-element>
