@@ -1,0 +1,38 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+
+<polymer-element name="employees-element" constructor="EmployeesElement" attributes="">
+  <template>
+    <core-ajax id="EmployeesAjax" auto
+      url="http://127.0.0.1:1337/employees"
+      handleAs="json"
+      response="{{employees}}"
+    ></core-ajax>
+    <ul>
+      <template repeat="{{e in employees}}">
+        <li on-click="{{selectEmployee}}">{{e.name}}: {{e.email}}</li>
+      </template>
+    </ul>
+<!--     <roster-list persons={{employees}}></roster-list> -->
+
+  </template>
+  <script>
+    Polymer('employees-element', {
+      selectEmployee: function(e, detail, sender) {
+        var employee = e.templateInstance.model['_id'];
+        alert("E: " + employee['_id']);
+      },
+
+      // element is fully prepared
+      ready: function(){ },
+      // instance of the element is created
+      created: function() { },
+      // instance was inserted into the document
+      enteredView: function() { },
+      // instance was removed from the document
+      leftView: function() { },
+      // attribute added, removed or updated
+      attributeChanged: function(attrName, oldVal, newVal) { }
+    });
+  </script>
+</polymer-element>
