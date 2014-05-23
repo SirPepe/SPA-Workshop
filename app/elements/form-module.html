@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
  <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="form-module"  attributes="project employee">
+<polymer-element name="form-module"  attributes="project employee view">
   <template>
   <style>
       /* styles for the custom element itself - lowest specificity */
@@ -55,29 +55,46 @@
     <hr>
 
     <div class="row">
-        <form class="form-horizontal" role="form">
+        <form on-submit="{{submitMe}}" class="form-horizontal" role="form">
             <div class="form-group">
                 <label class="col-lg-3 control-label">Start Date:</label>
-                <input class="form-control" type="text" value="{{start_date}}">
 
+                <div class="col-lg-8">
+                    <input class="form-control" readonly?="{{isReadonly}}" type="text" value="{{start_date}}">
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Time:</label>
-                <input class="form-control" type="text" value="{{time}}">
+
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" value="{{time}}">
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Phase:</label>
-                <input class="form-control" type="text" value="{{phase}}">
+
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" value="{{phase}}">
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Contract:</label>
-                <input class="form-control" type="text" value="{{contract}}">
+
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" value="{{contract}}">
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Description:</label>
-                <textarea rows="4" class="form-control">{{description}}</textarea>
+
+                <div class="col-lg-8">
+                    <textarea rows="4" class="form-control">{{description}}</textarea>
+                </div>
             </div>
-            <p><input on-click="{{submitMe}}" class="btn" type="button" value="Form abschicken" /></p>
+            <div class="form-group">
+            <div class="col-lg-8 col-lg-offset-3">
+                <input id="sbmt" class="btn" type="submit" value="Form abschicken" /></p>
+            </div>
         </form>
 
     </div>
@@ -97,7 +114,8 @@
   <script>
       var d = new Date();
     Polymer('form-module', {
-
+    view: false,
+    isReadonly: false,
     start_date: d.toLocaleDateString(),
     project_id: '1',
     employee_id: '1',
@@ -106,12 +124,19 @@
     phase: 'test',
     contract: 'test',
 
-
-
       // element is fully prepared
-      ready: function(){ },
+      ready: function(){
+        var self = this;
+        if(self.view)
+        {
+            this.$.sbmt.style.display = "none";
+            self.isReadonly = true;
+        }
+      },
       // instance of the element is created
-      created: function() { },
+      created: function() {
+
+      },
       // instance was inserted into the document
       enteredView: function() { },
       // instance was removed from the document
@@ -119,6 +144,8 @@
       // attribute added, removed or updated
       // attributeChanged: function(attrName, oldVal, newVal) { },
       submitMe: function(event, detail, sender) {
+            console.log(event);
+            event.preventDefault();
             this.$.ac.go();
       }
     });
