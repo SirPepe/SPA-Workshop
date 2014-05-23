@@ -17,24 +17,33 @@
   <script>
     Polymer('list-employees', {
 		ready: function() {
-		this.employees = [];
+			this.employees = [];
+		},
+		reversed : false,
+		reversedChanged: function(oldVal, newVal) {
+			console.log(oldVal, newVal, this.reversed);
+			if (this.reversed == oldVal)
+			{
+				return;
+			}
+			this.employees.reverse();
 		},
 		observe: {
 			'$.AjaxTag.response': 'triggerResponseChange'
 		},
 		triggerResponseChange: function(oldVal, newVal) {
-		  if (newVal == null)
-		  {
-			return;
-		  }
-		  if (this.reversed == 'true')
-		  {
-			this.employees = newVal.reverse();
-		  }
-		  else
-		  {
-			this.employees =newVal;
-		  }
+			if (newVal == null)
+			{
+				return;
+			}
+			if (this.reversed)
+			{
+				this.employees = newVal.reverse();
+			}
+			else
+			{
+				this.employees = newVal;
+			}
 		}
     });
   </script>
