@@ -1,0 +1,42 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+
+<polymer-element name="project-selection"  attributes="">
+  <template>
+  <input type="text" class="form-control" list="projects" />
+    <datalist id="projects">
+        <template repeat="{{project in projects}}">
+            <option>{{project.title}}</option>
+        </template>
+    </datalist>
+   <core-ajax
+    auto
+    id="getprojects"
+    url="http://127.0.0.1:1337/projects"
+    handleAs="json"
+    contentType="application/json"
+    on-core-response="{{handleResponse}}"
+    response="{{response}}">
+</core-ajax>
+  </template>
+  <script>
+    Polymer('project-selection', {
+        projects: '',
+      // element is fully prepared
+      ready: function(){
+        this.$.getprojects.go();
+      },
+      // instance of the element is created
+      created: function() { },
+      // instance was inserted into the document
+      enteredView: function() { },
+      // instance was removed from the document
+      leftView: function() { },
+      // attribute added, removed or updated
+      attributeChanged: function(attrName, oldVal, newVal) { },
+      handleResponse: function() {
+        this.projects = this.response;
+      }
+    });
+  </script>
+</polymer-element>
