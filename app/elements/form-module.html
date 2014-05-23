@@ -1,0 +1,81 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+ <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+
+<polymer-element name="form-module"  attributes="project employee">
+  <template>
+<div class="container">
+    <h1>Formular</h1>
+    <hr>
+
+    <div class="row">
+        <form on-submit="{{submitMe}}" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Start Date:</label>
+
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" value="{{start_date}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Time:</label>
+
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" value="{{time}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Phase:</label>
+
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" value="{{phase}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Contract:</label>
+
+                <div class="col-lg-8">
+                    <input class="form-control" type="text" value="{{contract}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Description:</label>
+
+                <div class="col-lg-8">
+                    <textarea class="form-control">{{description}}</textarea>
+                </div>
+            </div>
+            <p><input type="submit" value="Post" /></p>
+        </form>
+
+    </div>
+</div>
+<core-ajax id="ac"
+    method="POST"
+    url="http://127.0.0.1:1337/workitems"
+    body='{"project_id": "{{project}}", "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": "{{contract}}"}'
+  handleAs="json"
+  content-type="application/json"
+  on-core-response="{{handleResponse}}"
+  response="{{response}}">
+</core-ajax>
+
+  </template>
+  <script>
+    Polymer('form-module', {
+      // element is fully prepared
+      ready: function(){ },
+      // instance of the element is created
+      created: function() { },
+      // instance was inserted into the document
+      enteredView: function() { },
+      // instance was removed from the document
+      leftView: function() { },
+      // attribute added, removed or updated
+      // attributeChanged: function(attrName, oldVal, newVal) { },
+      submitMe: function(event, detail, sender) {
+            console.log(event);
+            this.$.ac.go();
+      }
+    });
+  </script>
+</polymer-element>
