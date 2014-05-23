@@ -11,8 +11,7 @@
       */
   </style>
 
-
-  <core-ajax auto
+  <core-ajax
   id="itemsAjax"
   method="POST"
   url="http://127.0.0.1:1337/workitems"
@@ -34,19 +33,13 @@ contentType="application/json">
         contract: 'A',
 
       // element is fully prepared
-      ready: function(){ },
+      ready: function(){this.$.itemsAjax.go(); },
       // instance of the element is created
       created: function() {  },
       // instance was inserted into the document
       enteredView: function() { },
       // instance was removed from the document
-      leftView: function() { },
-      // attribute added, removed or updated
-
-       valueChanged: function(oldVal,newVal){
-        console.info('Old: ',oldVal);
-        console.info('New: ',newVal);
-      }
+      leftView: function() { }
   });
 </script>
 </polymer-element>
