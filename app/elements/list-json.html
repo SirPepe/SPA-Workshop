@@ -3,15 +3,14 @@
 
 <!--
 Usage:
-			<list-json url="http://localhost:1337/employees" reversed="false" sortBy="_id">
+			<list-json url="http://localhost:1337/employees" sortBy="name" ascending="true">
 				<template>
 					<div>{{item.name}} : {{item.email}}</div>
 				</template>
 			</list-json>
-			-->
+-->
 
-
-<polymer-element name="list-json" attributes="url reversed">
+<polymer-element name="list-json" attributes="url sortBy ascending">
   <template>
     <core-ajax auto 
 	id="AjaxTag"
@@ -26,20 +25,25 @@ Usage:
 			this.jsonArray = [];
 			this.templateString = this.querySelector("template").innerHTML;
 		},
-		reversed : false,
-		reversedChanged: function(oldVal, newVal) {
-			console.log(oldVal, newVal, this.reversed);
-			if (this.reversed == oldVal)
+		sortByChanged: function(oldVal, newVal) {
+			if (this.sortBy == oldVal)
 			{
 				return;
 			}
-			this.jsonArray.reverse();
+			setContainer(this, this.sortBy, this.ascending);
+		},
+		ascending : true,
+		ascendingChanged: function(oldVal, newVal) {
+			if (this.sortBy == oldVal)
+			{
+				return;
+			}
+			setContainer(this, this.sortBy, this.ascending);
 		},
 		observe: {
 			'$.AjaxTag.response': 'triggerResponseChange'
 		},
 		triggerResponseChange: function(oldVal, newVal) {
-			var self = this;
 			if (newVal == null)
 			{
 				return;
@@ -52,15 +56,38 @@ Usage:
 			{
 				this.jsonArray = newVal;
 			}
-			this.jsonArray.forEach(function(item) {
-				var itemHtml = self.templateString;
-				Object.keys(item).forEach(function(key) {
-					itemHtml = itemHtml.replace("{{item." + key + "}}", item[key]);
-				});
-				
-				self.$.container.innerHTML += itemHtml;
-			});
+			setContainer(this, this.sortBy, this.ascending);
 		}
     });
+	
+	function setContainer(self, sortBy, ascending)
+	{
+		self.$.container.innerHTML = "";
+		if (sortBy != null)
+		{
+			self.jsonArray.sort(sort_by(sortBy, ascending, function(a) {
+				var result = a + "";
+				return result.toUpperCase()
+			}));
+		}
+		self.jsonArray.forEach(function(item) {
+			var itemHtml = self.templateString;
+			Object.keys(item).forEach(function(key) {
+				itemHtml = itemHtml.replace("{{item." + key + "}}", item[key]);
+			});
+			
+			self.$.container.innerHTML += itemHtml;
+		});
+	}
+	
+	var sort_by = function(field, reverse, primer){
+	var key = function (x) {return primer ? primer(x[field]) : x[field]};
+
+	return function (a,b) {
+	  var A = key(a), B = key(b);
+	  return ( (A < B) ? -1 : ((A > B) ? 1 : 0) ) * [-1,1][+!!reverse];                  
+	}
+}
+	
   </script>
 </polymer-element>
