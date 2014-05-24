@@ -82,10 +82,27 @@ function validate(doc){
   return errors;
 }
 
+function getWorkitemsQuery(urlQuery)
+{
+    var query = new Object();
+    if(defined(urlQuery.employee_id))
+    {
+        query.employee_id = parseInt(urlQuery.employee_id);
+    }
+    if(defined(urlQuery.min_start_date) && defined(urlQuery.max_start_date))
+    {
+        query.start_date = {
+            $gte: parseInt(urlQuery.min_start_date),
+            $lte: parseInt(urlQuery.max_start_date)
+        }
+    }
+    return query;
+}
 
 async.parallel([
   importData.bind(null, projectsDb, __dirname + '/projects.json'),
-  importData.bind(null, employeesDb, __dirname + '/employees.json')
+  importData.bind(null, employeesDb, __dirname + '/employees.json'),
+  importData.bind(null, workitemsDb, __dirname + '/workitems.json')
 ], function(){
 
   server.get('/echo', function(req, res, next){
@@ -112,7 +129,8 @@ async.parallel([
   });
 
   server.get('/workitems', function(req, res, next){
-    workitemsDb.find(req.query, getMultiHandler.bind(null, req, res, next));
+    var dbQuery = getWorkitemsQuery(req.query);
+    workitemsDb.find(dbQuery, getMultiHandler.bind(null, req, res, next));
   });
 
   server.get('/workitems/:_id', function(req, res, next){
