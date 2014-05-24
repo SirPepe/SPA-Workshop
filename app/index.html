@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MIZE</title>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <script src="bower_components/platform/platform.js"></script>
+    <link rel="import" href="elements/list-json.html">
+</head>
+<body>
+
+<h1>Employees</h1>
+<dl>
+    <list-json url="http://localhost:1337/employees" sortBy="name" ascending="true">
+    <template>
+        <dd>
+            {{item._id}}
+            {{item.name}}
+            {{item.email}}
+            {{item.company}}
+        </dd>
+    </template>
+    </list-json>
+</dl>
+
+<h1>Projects</h1>
+<dl>
+<list-json url="http://localhost:1337/projects" sortBy="name" ascending="true">
+    <template>
+        <dd>{{item.title}} {{item.client}}</dd>
+    </template>
+</list-json>
+</dl>
+
+<h1>Workitems</h1>
+<dl>
+<list-json url="http://localhost:1337/workitems" sortBy="name" ascending="true">
+    <template>
+        <dd>{{item.description}} {{item.start_date}} {{item.time}}</dd>
+    </template>
+</list-json>
+</dl>
+
+</body>
+</html>
