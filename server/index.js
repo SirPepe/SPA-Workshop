@@ -4,11 +4,10 @@ var restify = require('restify');
 var server = restify.createServer();
 var NeDB = require('nedb');
 
-
-var projectsDb = new NeDB();
-var employeesDb = new NeDB();
-var workitemsDb = new NeDB();
-var contractsDb = new NeDB();
+var projectsDb = new NeDB({ filename: 'data/projects.db', autoload: true });
+var employeesDb = new NeDB({ filename: 'data/employees.db', autoload: true });
+var workitemsDb = new NeDB({ filename: 'data/workitems.db', autoload: true });
+var contractsDb = new NeDB({ filename: 'data/contracts.db', autoload: true });
 
 server.use(restify.CORS());
 server.pre(restify.pre.userAgentConnection());
@@ -16,16 +15,25 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.bodyParser());
 server.use(restify.queryParser());
 
-
 // Statische Fake-Daten um z.B. projects und employees importieren
 function importData(db, sourcefile, done){
-  fs.readFile(sourcefile, { encoding: 'utf-8' }, function(err, json){
-    if(err){
-      throw err;
-    }
-    var data = JSON.parse(json);
-    db.insert(data, done);
-  });
+    db.count({}, function (err, count) {
+        if(err){
+            throw err;
+        }
+        if(count > 0) {
+            done();
+        }
+        else {
+            fs.readFile(sourcefile, { encoding: 'utf-8' }, function(err, json){
+                if(err){
+                    throw err;
+                }
+                var data = JSON.parse(json);
+                db.insert(data, done);
+            });
+        }
+    });
 }
 
 function getMultiHandler(req, res, next, err, doc){
