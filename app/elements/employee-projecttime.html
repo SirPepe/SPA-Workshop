@@ -1,0 +1,62 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/svg-piechart/svg-piechart.html">
+
+<polymer-element name="employee-projecttime"  attributes="employeeId piechartsize">
+  <template>
+  <core-ajax auto 
+    id="Workitems"
+    url="http://0.0.0.0:1337/workitems?employeed_id={{employeeId}}"
+    handleAs="json"
+  />
+    <style>
+      /* styles for the custom element itself - lowest specificity */
+      :host { display: block; }
+      /* 
+      style if an ancestor has the different class
+      :host(.different) { } 
+      */
+    </style>
+    <span>Projektzeitverteilung:<span>
+    <template if="{{times.length > 0}}">
+      <svg-piechart size="{{piechartsize}}" data="{{times}}"></svg-piechart>
+    </template>
+    <template if="{{times.length === 0}}">
+      <span>Keine Projekte</span>
+    </template>
+
+  </template>
+  <script>
+    Polymer('employee-projecttime', {
+      times: [],
+
+      // element is fully prepared
+      ready: function(){ 
+
+      },
+      observe: {
+        '$.Workitems.response': 'triggerChangeEvent' 
+      },
+      triggerChangeEvent: function(oldVal, workitems) {
+        if (workitems != null) {
+          var data = {};
+          workitems.forEach(function(wi){
+            if (typeof data[wi.project_id] === "undefined") {
+              data[wi.project_id] = 0;
+            }
+            data[wi.project_id] += wi.time;
+          });
+        }
+
+
+        this.times = new Array();
+        for (var key in data) {
+          this.times.push(data[key]);
+        }
+        if (this.times.length === 1) {
+          this.times.push(0.000001);
+        }
+        
+      }
+    });
+  </script>
+</polymer-element>
