@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>MIZE</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/main.css">
 
     <script src="bower_components/platform/platform.js"></script>
     <link rel="import" href="elements/list-json.html">
@@ -23,13 +25,16 @@
 <x-route path="/newworkitem"/>
 <x-route path="/about"/>
 
-<ul>
-    <li><a href="#/employees">Employees</a></li>
+<div class="container">
+<div class="header">
+<ul class="nav nav-pills pull-right">
+    <li class="active"><a href="#/employees">Employees</a></li>
     <li><a href="#/projects">Projects</a></li>
     <li><a href="#/workitems">Workitems</a></li>
     <li><a href="#/newworkitem">New Workitems</a></li>
     <li><a href="#/about">About</a></li>
 </ul>
+</div>
     
 <x-route-page id="employees">
 <h1>Employees</h1>
@@ -80,8 +85,13 @@
     <p>Die neue Zeiterfassung</p>
 </div>
 </x-route-page>
+</div>
 
 <script>
+document.addEventListener('WebComponentsReady', function() {
+            // Perform some behaviour
+        });
+
 document.addEventListener('route-changed', function(route){
 
     var routePages = document.querySelectorAll('x-route-page');
@@ -91,8 +101,21 @@ document.addEventListener('route-changed', function(route){
         routePages[i].setAttribute('hidden', '');
     }
 
+    var links = document.querySelectorAll('.nav li a');
+    console.dir(links);
+    for (var i = 0; i < links.length; i++) {
+        console.dir(links[i]);
+
+        if (links[i].href.indexOf(route.detail[0]) > -1)
+            links[i].parentNode.classList.add('active');
+        else
+            links[i].parentNode.classList.remove('active');
+    }
+
     var newPage = document.getElementById(route.detail);
     newPage.removeAttribute('hidden');
+
+
 
     console.dir(route);
 });
