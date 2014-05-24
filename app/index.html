@@ -64,21 +64,28 @@
 
 <x-route-page id="projects">
 <h1>Projects</h1>
-<dl>
+<dl class="container">
     <list-json url="http://localhost:1337/projects" sortBy="name" ascending="true">
-    <template>
-        <dd>{{item.title}} {{item.client}}</dd>
-    </template>
-</list-json>
+        <template>
+            <dd class="row">
+                <div class="col-md-4">{{item.title}}</div>
+                <div class="col-md-8">{{item.client}}</div>
+            </dd>
+        </template>
+    </list-json>
 </dl>
 </x-route-page>
 
 <x-route-page id="workitems">
 <h1>Workitems</h1>
-<dl>
+<dl class="container">
     <list-json url="http://localhost:1337/workitems" sortBy="name" ascending="true">
     <template>
-        <dd>{{item.description}} {{item.start_date}} {{item.time}}</dd>
+        <dd class="row">
+            <div class="col-md-4">{{item.description}}</div>
+            <div class="col-md-4">{{item.start_date}}</div>
+            <div class="col-md-4">{{item.time}}</div>
+        </dd>
     </template>
 </list-json>
 </dl>
