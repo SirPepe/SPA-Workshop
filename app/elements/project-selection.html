@@ -1,9 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="project-selection"  attributes="url valuefield keyfield selectedId">
+<polymer-element name="project-selection"  attributes="url valuefield keyfield value readonly">
   <template>
-  <input on-keyup="{{handleKeyUp}}" id="inputField" type="text" class="form-control" list="items" />
+  <input readonly?="{{readonly}}"  on-keyup="{{handleKeyUp}}" id="inputField" type="text" value="{{text}}" class="form-control" list="items" />
     <datalist id="items">
         <template repeat="{{field in fieldValues}}">
             <option id="{{field.key}}" value="{{field.value}}">{{field.value}}</option>
@@ -22,22 +22,24 @@
   <script>
 
     Polymer('project-selection', {
-        items: '',
-        fieldValues: {},
-        selectedId: '',
-        url: 'http://127.0.0.1:1337/projects',
+
+        items: '', //JSON collection
+        fieldValues: {}, //Nicenames
+        value: '', //Selected value
+        url: 'http://127.0.0.1:1337/', //Default Url
+        readonly: false,
+        text: '',
+
       // element is fully prepared
       ready: function(){
         this.$.getitems.go();
+        this.$.inputField.value = this.$.items.querySelector('option[id="' + this.value + '"]');
       },
       handleKeyUp: function(event) {
-        if (event.which === 13) {
-            var x = this.$.inputField.value;
-            var val = this.$.items.querySelector('option[value="' + x + '"]');
-            console.log(x, val, 'option[value="' + x + '"]');
-            var endval = val.getAttribute('id');
-            this.selectedId = endval;
-        }
+        var x = this.$.inputField.value;
+        var val = this.$.items.querySelector('option[value="' + x + '"]');
+        var endval = val.getAttribute('id');
+        this.value = endval;
       },
       observe: {
         '$.getitems.response': 'triggerResponseChange'
@@ -61,14 +63,12 @@
 
         for(var i=0;i<this.items.length;i++){
             var obj = this.items[i];
-
+            console.log(obj);
                 var attrKey = obj[this.keyfield];
                 var attrValue = obj[this.valuefield];
-                console.log(attrValue);
                 this.fieldValues.push({ key: attrKey, value: attrValue});
             }
             this.fieldValues.sort();
-            console.log(this.fieldValues);
         },
     });
   </script>

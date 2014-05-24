@@ -4,53 +4,6 @@
 
 <polymer-element name="form-module"  attributes="project employee view">
   <template>
-  <style>
-      /* styles for the custom element itself - lowest specificity */
-      :host { display: block; }
-      /*
-      style if an ancestor has the different class
-      :host(.different) { }
-      */
-     .form-control {
-        display: block;
-        width: 100%;
-        height: 34px;
-        padding: 6px 12px;
-        font-size: 14px;
-        line-height: 1.42857;
-        color: #555555;
-        vertical-align: middle;
-        background-color: white;
-        background-image: none;
-        border: 1px solid #cccccc;
-        border-radius: 4px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-        transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-    }
-
-  .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-    line-height: 1.33;
-    border-radius: 6px;
-    color: white;
-    background-color: #5cb85c;
-    border-color: #4cae4c;
-  }
-
-  label {
-    font-weight: 700;
-    margin-top: 20px;
-    display: block;
-  }
-
-  textarea {
-    height: 200px;
-  }
-
-  </style>
 <div class="container">
     <h1>Formular</h1>
     <hr>
@@ -60,35 +13,36 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Project</label>
                 <div class="col-lg-8">
-                    <project-selection id="ps" url="http://127.0.0.1:1337/projects" valuefield="title" keyfield="_id"></project-selection>
+                    <project-selection value="{{project_id}}" readonly="{{view}}" id="ps" url="http://127.0.0.1:1337/projects" valuefield="title" keyfield="_id"></project-selection>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Start Date:</label>
 
                 <div class="col-lg-8">
-                    <input class="form-control" readonly?="{{isReadonly}}" type="text" value="{{start_date}}">
+                    <input class="form-control" readonly?="{{view}}" type="text" value="{{start_date}}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Time:</label>
 
                 <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{time}}">
+                    <input class="form-control" readonly?="{{view}}" type="text" value="{{time}}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Phase:</label>
 
                 <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{phase}}">
+                    <label for="notknuf"><input readonly?="{{view}}" class="form-control" id="notknuf" type="radio" name="phase" checked?="{{phase=='KNUF'}}" value="{{phase}}">&nbsp;Normal</label>
+                    <label for="knuf"><input readonly?="{{view}}" id="knuf" class="form-control" type="radio" name="phase" checked?="{{phase=='KNUF'}}" value="{{phase}}">&nbsp;KNUF</label>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Contract:</label>
 
                 <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{contract}}">
+                    <project-selection readonly="{{view}}" id="cs" url="http://127.0.0.1:1337/contracts" valuefield="contract_name" keyfield="contract_id"></project-selection>
                 </div>
             </div>
             <div class="form-group">
@@ -120,16 +74,17 @@
   </template>
   <script>
       var d = new Date();
+
     Polymer('form-module', {
-    view: false,
-    isReadonly: false,
-    start_date: d.toLocaleDateString(),
-    project_id: '1',
-    employee_id: '1',
-    description: 'hello world',
-    time: d.toLocaleTimeString(),
-    phase: 'test',
-    contract: 'test',
+        view: false,
+        start_date: d.toLocaleDateString(),
+        project_id: '2qsHLKVVbSaJX3XY',
+        employee_id: '1',
+        contract_id: '1',
+        description: 'hello world',
+        time: d.toLocaleTimeString(),
+        phase: 'KNUF',
+        contract: 'test',
 
       // element is fully prepared
       ready: function(){
