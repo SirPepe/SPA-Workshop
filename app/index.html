@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <style type="text/css">
+        .rowItem {
+
+        }
+    </style>
 
     <script src="bower_components/platform/platform.js"></script>
     <link rel="import" href="elements/list-json.html">
@@ -43,14 +48,14 @@
 
         <x-route-page id="employees">
         <h1>Employees</h1>
-        <dl>
+        <dl class="container">
             <list-json url="http://localhost:1337/employees" sortBy="name" ascending="true">
             <template>
-                <dd>
-                    {{item._id}}
-                    {{item.name}}
-                    {{item.email}}
-                    {{item.company}}
+                <dd class="row">
+                    <div class="col-md-3">{{item._id}}</div>
+                    <div class="col-md-3">{{item.name}}</div>
+                    <div class="col-md-3">{{item.email}}</div>
+                    <div class="col-md-3">{{item.company}}</div>
                 </dd>
             </template>
         </list-json>

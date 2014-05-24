@@ -12,10 +12,11 @@ Usage:
 
 <polymer-element name="list-json" attributes="url sortBy ascending">
   <template>
-    <core-ajax auto 
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <core-ajax auto
 	id="AjaxTag"
 	url="{{url}}"
-	handleAs="json" />  
+	handleAs="json" />
     <div id="container">
     </div>
   </template>
@@ -59,7 +60,7 @@ Usage:
 			setContainer(this, this.sortBy, this.ascending);
 		}
     });
-	
+
 	function setContainer(self, sortBy, ascending)
 	{
 		self.$.container.innerHTML = "";
@@ -75,19 +76,19 @@ Usage:
 			Object.keys(item).forEach(function(key) {
 				itemHtml = itemHtml.replace("{{item." + key + "}}", item[key]);
 			});
-			
+
 			self.$.container.innerHTML += itemHtml;
 		});
 	}
-	
+
 	var sort_by = function(field, reverse, primer){
 	var key = function (x) {return primer ? primer(x[field]) : x[field]};
 
 	return function (a,b) {
 	  var A = key(a), B = key(b);
-	  return ( (A < B) ? -1 : ((A > B) ? 1 : 0) ) * [-1,1][+!!reverse];                  
+	  return ( (A < B) ? -1 : ((A > B) ? 1 : 0) ) * [-1,1][+!!reverse];
 	}
 }
-	
+
   </script>
 </polymer-element>
