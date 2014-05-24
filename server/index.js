@@ -8,7 +8,7 @@ var NeDB = require('nedb');
 var projectsDb = new NeDB();
 var employeesDb = new NeDB();
 var workitemsDb = new NeDB();
-
+var contractsDb = new NeDB();
 
 server.use(restify.CORS());
 server.pre(restify.pre.userAgentConnection());
@@ -102,7 +102,8 @@ function getWorkitemsQuery(urlQuery)
 async.parallel([
   importData.bind(null, projectsDb, __dirname + '/projects.json'),
   importData.bind(null, employeesDb, __dirname + '/employees.json'),
-  importData.bind(null, workitemsDb, __dirname + '/workitems.json')
+  importData.bind(null, workitemsDb, __dirname + '/workitems.json'),
+  importData.bind(null, contractsDb, __dirname + '/contracts.json')
 ], function(){
 
   server.get('/echo', function(req, res, next){
@@ -181,6 +182,15 @@ async.parallel([
       res.send(200, num);
       return next();
     });
+  });
+
+    server.get('/contracts', function(req, res, next){
+    contractsDb.find(req.query, getMultiHandler.bind(null, req, res, next));
+  });
+
+  server.get('/contracts/:_id', function(req, res, next){
+    contractsDb.find({ _id: req.params._id },
+      getSingleHandler.bind(null, req, res, next));
   });
 
 });
