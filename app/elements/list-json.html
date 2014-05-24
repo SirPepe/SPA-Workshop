@@ -1,6 +1,16 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
+<!--
+Usage:
+			<list-json url="http://localhost:1337/employees" reversed="false" sortBy="_id">
+				<template>
+					<div>{{item.name}} : {{item.email}}</div>
+				</template>
+			</list-json>
+			-->
+
+
 <polymer-element name="list-json" attributes="url reversed">
   <template>
     <core-ajax auto 
