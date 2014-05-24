@@ -11,9 +11,27 @@
     <link rel="import" href="elements/form-module.html">
     <link rel="import" href="elements/render-employee.html">
 
+    <link rel="import" href="bower_components/x-route/src/x-route.html">
+    <link rel="import" href="elements/x-route-page.html">
+
 </head>
 <body>
 
+<x-route path="/employees" route="/employees" auto/>
+<x-route path="/projects"/>
+<x-route path="/workitems"/>
+<x-route path="/newworkitem"/>
+<x-route path="/about"/>
+
+<ul>
+    <li><a href="#/employees">Employees</a></li>
+    <li><a href="#/projects">Projects</a></li>
+    <li><a href="#/workitems">Workitems</a></li>
+    <li><a href="#/newworkitem">New Workitems</a></li>
+    <li><a href="#/about">About</a></li>
+</ul>
+    
+<x-route-page id="employees">
 <h1>Employees</h1>
 <dl>
     <list-json url="http://localhost:1337/employees" sortBy="name" ascending="true">
@@ -27,7 +45,9 @@
     </template>
     </list-json>
 </dl>
+</x-route-page>
 
+<x-route-page id="projects">
 <h1>Projects</h1>
 <dl>
 <list-json url="http://localhost:1337/projects" sortBy="name" ascending="true">
@@ -36,7 +56,9 @@
     </template>
 </list-json>
 </dl>
+</x-route-page>
 
+<x-route-page id="workitems">
 <h1>Workitems</h1>
 <dl>
 <list-json url="http://localhost:1337/workitems" sortBy="name" ascending="true">
@@ -45,9 +67,36 @@
     </template>
 </list-json>
 </dl>
+</x-route-page>
 
+<x-route-page id="newworkitem">
 <h1>New Workitem</h1>
 <form-module></form-module>
+</x-route-page>
+
+<x-route-page id="about">
+<div>
+    <h2>About</h2>
+    <p>Die neue Zeiterfassung</p>
+</div>
+</x-route-page>
+
+<script>
+document.addEventListener('route-changed', function(route){
+
+    var routePages = document.querySelectorAll('x-route-page');
+    console.dir(routePages);
+    for (var i = 0; i < routePages.length; i++) {
+        console.dir(routePages[i]);
+        routePages[i].setAttribute('hidden', '');
+    }
+
+    var newPage = document.getElementById(route.detail);
+    newPage.removeAttribute('hidden');
+
+    console.dir(route);
+});
+</script>
 
 </body>
 </html>
