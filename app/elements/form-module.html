@@ -13,7 +13,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label">Project</label>
                 <div class="col-lg-8">
-                    <project-selection value="{{project_id}}" readonly="{{view}}" id="ps" url="http://127.0.0.1:1337/projects" valuefield="title" keyfield="_id"></project-selection>
+                    <project-selection value="{{project_id}}" readonly="{{view}}" id="ps" url="http://127.0.0.1:1337/projects" value="" valuefield="title" keyfield="_id"></project-selection>
                 </div>
             </div>
             <div class="form-group">
@@ -64,7 +64,7 @@
     id="ac"
     method="POST"
     url="http://127.0.0.1:1337/workitems"
-    body='{"project_id": "{{project}}", "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": "{{contract}}"}'
+    body='{"project_id": this.$.ps.value, "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": this.$.cs.value}'
     handleAs="json"
     contentType="application/json"
     on-core-response="{{handleResponse}}"
