@@ -64,7 +64,7 @@
     id="ac"
     method="POST"
     url="http://127.0.0.1:1337/workitems"
-    body='{"project_id": this.$.ps.value, "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": this.$.cs.value}'
+    body='{"project_id":' + this.$.ps.value + ', "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": ' + this.$.cs.value + '}'
     handleAs="json"
     contentType="application/json"
     on-core-response="{{handleResponse}}"
