@@ -3,7 +3,7 @@
       "project_id": 1,
       "employee_id" : 4,
       "description" : "Test Workitem 2.3.2014",
-      "start_date": 1396396800000, // 2.3.2014
+      "start_date": 1396396800000,
       "time": 6,
       "phase": "",
       "contract": ""
@@ -12,7 +12,7 @@
       "project_id": 1,
       "employee_id" : 4,
       "description" : "Test Workitem 2.4.2014",
-      "start_date": 1398988800000, // 2.4.2014
+      "start_date": 1398988800000,
       "time": 6,
       "phase": "",
       "contract": ""
@@ -21,7 +21,7 @@
       "project_id": 1,
       "employee_id" : 4,
       "description" : "Test Workitem 2.5.2014",
-      "start_date": 1401667200000, // 2.5.2014
+      "start_date": 1401667200000,
       "time": 6,
       "phase": "",
       "contract": ""
@@ -30,7 +30,7 @@
       "project_id": 1,
       "employee_id" : 4,
       "description" : "Test Workitem 2.6.2014",
-      "start_date": 1404259200000, // 2.6.2014
+      "start_date": 1404259200000,
       "time": 6,
       "phase": "",
       "contract": ""
