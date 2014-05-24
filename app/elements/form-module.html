@@ -64,7 +64,7 @@
     id="ac"
     method="POST"
     url="http://127.0.0.1:1337/workitems"
-    body='{"project_id":' + this.$.ps.value + ', "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": ' + this.$.cs.value + '}'
+    body='{"project_id": "{{storeProject}}", "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": "{{storeContract}}"}'
     handleAs="json"
     contentType="application/json"
     on-core-response="{{handleResponse}}"
@@ -85,6 +85,8 @@
         time: d.toLocaleTimeString(),
         phase: 'KNUF',
         contract: 'test',
+        storeProject: '',
+        storeContract: '',
 
       // element is fully prepared
       ready: function(){
@@ -104,10 +106,13 @@
       // instance was removed from the document
       leftView: function() { },
       // attribute added, removed or updated
-      // attributeChanged: function(attrName, oldVal, newVal) { },
+      attributeChanged: function(attrName, oldVal, newVal) {
+
+      },
       submitMe: function(event, detail, sender) {
-            console.log(event);
             event.preventDefault();
+            this.storeProject = this.$.ps.value;
+            this.storeContract = this.$.cs.value;
             this.$.ac.go();
       }
     });
