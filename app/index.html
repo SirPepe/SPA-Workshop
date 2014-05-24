@@ -16,46 +16,51 @@
     <link rel="import" href="bower_components/x-route/src/x-route.html">
     <link rel="import" href="elements/x-route-page.html">
 
+    <link rel="import" href="elements/employee-projecttime.html">
+
 </head>
 <body>
 
-<x-route path="/employees" route="/employees" auto/>
-<x-route path="/projects"/>
-<x-route path="/workitems"/>
-<x-route path="/newworkitem"/>
-<x-route path="/about"/>
+    <x-route path="/employees" route="/employees" auto/>
+    <x-route path="/projects"/>
+    <x-route path="/workitems"/>
+    <x-route path="/newworkitem"/>
+    <x-route path="/statistics"/>
+    <x-route path="/about"/>
 
-<div class="container">
-<div class="header">
-<ul class="nav nav-pills pull-right">
-    <li class="active"><a href="#/employees">Employees</a></li>
-    <li><a href="#/projects">Projects</a></li>
-    <li><a href="#/workitems">Workitems</a></li>
-    <li><a href="#/newworkitem">New Workitems</a></li>
-    <li><a href="#/about">About</a></li>
-</ul>
-</div>
-    
-<x-route-page id="employees">
-<h1>Employees</h1>
-<dl>
-    <list-json url="http://localhost:1337/employees" sortBy="name" ascending="true">
-    <template>
-        <dd>
-            {{item._id}}
-            {{item.name}}
-            {{item.email}}
-            {{item.company}}
-        </dd>
-    </template>
-    </list-json>
-</dl>
+    <div class="container">
+        <div class="header">
+            <ul class="nav nav-pills pull-right">
+                <li class="active"><a href="#/employees">Employees</a></li>
+                <li><a href="#/projects">Projects</a></li>
+                <li><a href="#/workitems">Workitems</a></li>
+                <li><a href="#/newworkitem">New Workitems</a></li>
+                <li><a href="#/statistics">Statistics</a></li>
+                <li><a href="#/about">About</a></li>
+            </ul>
+            <h3 class="text-muted">Zeiterfassung</h3>
+        </div>
+
+        <x-route-page id="employees">
+        <h1>Employees</h1>
+        <dl>
+            <list-json url="http://localhost:1337/employees" sortBy="name" ascending="true">
+            <template>
+                <dd>
+                    {{item._id}}
+                    {{item.name}}
+                    {{item.email}}
+                    {{item.company}}
+                </dd>
+            </template>
+        </list-json>
+    </dl>
 </x-route-page>
 
 <x-route-page id="projects">
 <h1>Projects</h1>
 <dl>
-<list-json url="http://localhost:1337/projects" sortBy="name" ascending="true">
+    <list-json url="http://localhost:1337/projects" sortBy="name" ascending="true">
     <template>
         <dd>{{item.title}} {{item.client}}</dd>
     </template>
@@ -66,7 +71,7 @@
 <x-route-page id="workitems">
 <h1>Workitems</h1>
 <dl>
-<list-json url="http://localhost:1337/workitems" sortBy="name" ascending="true">
+    <list-json url="http://localhost:1337/workitems" sortBy="name" ascending="true">
     <template>
         <dd>{{item.description}} {{item.start_date}} {{item.time}}</dd>
     </template>
@@ -75,15 +80,21 @@
 </x-route-page>
 
 <x-route-page id="newworkitem">
-<h1>New Workitem</h1>
-<form-module></form-module>
+    <h1>New Workitem</h1>
+    <form-module></form-module>
 </x-route-page>
 
-<x-route-page id="about">
-<div>
-    <h2>About</h2>
-    <p>Die neue Zeiterfassung</p>
+<x-route-page id="statistics">
+
+    <h1>Statistics</h1>
+    <employee-projecttime employeeId="Ei6znekIZzo7IKBD"></employee-projecttime>
+</x-route-page>
 </div>
+
+<x-route-page id="about">
+
+    <h1>About</h1>
+    <p>Die neue Zeiterfassung</p>
 </x-route-page>
 </div>
 
