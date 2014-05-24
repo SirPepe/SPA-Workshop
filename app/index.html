@@ -52,10 +52,10 @@
             <list-json url="http://localhost:1337/employees" sortBy="name" ascending="true">
             <template>
                 <dd class="row">
-                    <div class="col-md-3">{{item._id}}</div>
                     <div class="col-md-3">{{item.name}}</div>
                     <div class="col-md-3">{{item.email}}</div>
                     <div class="col-md-3">{{item.company}}</div>
+                    <div class="col-md-3"><employee-projecttime employeeId="{{item._id}}"></employee-projecttime></div>
                 </dd>
             </template>
         </list-json>

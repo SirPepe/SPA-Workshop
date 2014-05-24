@@ -95,7 +95,7 @@ function getWorkitemsQuery(urlQuery)
     var query = new Object();
     if(defined(urlQuery.employee_id))
     {
-        query.employee_id = parseInt(urlQuery.employee_id);
+        query.employee_id = urlQuery.employee_id;
     }
     if(defined(urlQuery.min_start_date) && defined(urlQuery.max_start_date))
     {
@@ -161,7 +161,7 @@ async.parallel([
       }
       console.log('Stored workItem for project',doc.project_id);
       res.send(201, newDoc);
-      
+
       return next();
     });
   });
