@@ -10,6 +10,19 @@
 
     <div class="row">
         <form id="formmask" on-submit="{{submitMe}}" class="form-horizontal" role="form">
+             <div class="form-group">
+                <label class="col-lg-3 control-label">Employee</label>
+                <div class="col-lg-8">
+                    <project-selection
+                        readonly="{{view}}"
+                        id="es"
+                        url="http://127.0.0.1:1337/employees"
+                        value="{{storeEmployee}}"
+                        valuefield="name"
+                        keyfield="_id">
+                    </project-selection>
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-lg-3 control-label">Project</label>
                 <div class="col-lg-8">
@@ -79,7 +92,7 @@
     id="ac"
     method="POST"
     url="http://127.0.0.1:1337/workitems"
-    body='{"project_id": "{{storeProject}}", "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": "{{storeContract}}"}'
+    body='{"project_id": "{{storeProject}}", "employee_id": "{{storeEmployee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": "{{storeContract}}"}'
     handleAs="json"
     contentType="application/json"
     on-core-response="{{handleResponse}}"
@@ -102,6 +115,7 @@
         contract: 'test',
         storeProject: '',
         storeContract: '',
+        storeEmployee: '',
 
       // element is fully prepared
       ready: function(){
@@ -128,7 +142,7 @@
             event.preventDefault();
             this.storeProject = this.$.ps.value;
             this.storeContract = this.$.cs.value;
-
+            this.storeEmployee = this.$.es.value;
             this.$.ac.go();
       }
     });
