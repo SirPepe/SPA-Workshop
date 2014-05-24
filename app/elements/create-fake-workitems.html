@@ -1,0 +1,73 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="create-fake-workitems"  constructor="CreateFakeWorkitemsElement" attributes="">
+  <!-- requires: <script src="bower_components/jquery/dist/jquery.min.js"></script> in index.html; needs to be installed with "bower install jquery" -->
+  <template>
+    <!-- <template id="createFakes" repeat="{{workitem in workitems}}">
+      <template bind="{{workitem}}">
+        <core-ajax
+            id="ac"
+            method="POST"
+            url="http://127.0.0.1:1337/workitems"
+            body='{"project_id": "{{project}}", "employee_id": "{{employee}}", "description": "{{description}}", "start_date": "{{start_date}}", "time": "{{time}}","phase": "{{phase}}", "contract": "{{contract}}"}'
+            handleAs="json"
+            contentType="application/json"
+            on-core-response="{{handleResponse}}"
+            response="{{response}}">
+        </core-ajax>
+      </template>
+    </template>-->
+    <button on-click="{{createFakeData}}">Create Fake data</button>
+  </template>
+  <script>
+    Polymer('create-fake-workitems', {
+      workitems: [
+        {
+          project_id: 1,
+          employee_id: 1,
+          description: "Workshop RIA",
+          start_date: 2014-05-23,
+          time: 8,
+          phase: "Keine Ahnung",
+          contract: "" /*has to be provided, otherwise it does not work */
+        },
+        {
+          project_id: 1,
+          employee_id: 2,
+          description: "Workshop RIA",
+          start_date: 2014-05-23,
+          time: 8,
+          phase: "Keine Ahnung",
+          contract: "" /*has to be provided, otherwise it does not work */
+        },
+        {
+          project_id: 2,
+          employee_id: 2,
+          description: "Anderes Projekt",
+          start_date: 2014-05-23,
+          time: 8,
+          phase: "?",
+          contract: "" /*has to be provided, otherwise it does not work */
+        }
+      ],
+      createFakeData: function() {
+        /*var t = document.querySelector("#createFakes");
+        t.model = workitems;
+        t.bind("workitems");
+        //this.$.createFakes.go();*/
+        for (i = 0; i < this.workitems.length; i++) {
+          $.ajax({
+            type: 'POST',
+            url: 'http://127.0.0.1:1337/workitems',
+            data: JSON.stringify(this.workitems[i]),
+            contentType: 'application/json',
+            dataType: 'json'
+          });
+        }
+      },
+      handleResponse: function() {
+        alert("handleResponse called");
+      }
+    });
+  </script>
+</polymer-element>

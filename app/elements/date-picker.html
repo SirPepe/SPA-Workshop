@@ -1,0 +1,35 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="date-picker"  constructor="DatePickerElement" attributes="utcdate">
+  <template>
+    <input type="date" id="dp" />
+  </template>
+  <script>
+    Polymer('date-picker', {
+      dateFromUtc: function(utcdate) {
+        var date = new Date();
+        date.setTime(utcdate);
+        return this.ISODateString(date);
+      },
+      pad: function(n){
+        return n<10 ? '0'+n : n
+      },
+      ISODateString: function(d){
+        return d.getUTCFullYear()+'-'
+              + this.pad(d.getUTCMonth()+1)+'-'
+              + this.pad(d.getUTCDate());
+      },
+      ready: function() {
+        //this.datevalue 
+        //$(this.$.dp).datepicker();
+        this.$.dp.value = this.dateFromUtc(this.utcdate);
+      },
+      attributeChanged: function(attrName, oldVal, newVal) {
+        //if (attrName === "utcdate") {
+
+        //}
+      }
+
+    });
+  </script>
+</polymer-element>
