@@ -1,30 +1,46 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="project-selection"  attributes="">
+<polymer-element name="project-selection"  attributes="url valuefield keyfield selectedId">
   <template>
-  <input type="text" class="form-control" list="projects" />
-    <datalist id="projects">
-        <template repeat="{{project in projects}}">
-            <option>{{project.title}}</option>
+  <input on-keyup="{{handleKeyUp}}" id="inputField" type="text" class="form-control" list="items" />
+    <datalist id="items">
+        <template repeat="{{field in fieldValues}}">
+            <option id="{{field.key}}" value="{{field.value}}">{{field.value}}</option>
         </template>
     </datalist>
    <core-ajax
-    auto
-    id="getprojects"
-    url="http://127.0.0.1:1337/projects"
-    handleAs="json"
-    contentType="application/json"
-    on-core-response="{{handleResponse}}"
-    response="{{response}}">
-</core-ajax>
+        auto
+        id="getitems"
+        url="{{url}}"
+        handleAs="json"
+        contentType="application/json"
+        on-core-response="{{handleResponse}}"
+        response="{{response}}">
+    </core-ajax>
   </template>
   <script>
+
     Polymer('project-selection', {
-        projects: '',
+        items: '',
+        fieldValues: {},
+        selectedId: '',
+        url: 'http://127.0.0.1:1337/projects',
       // element is fully prepared
       ready: function(){
-        this.$.getprojects.go();
+        this.$.getitems.go();
+      },
+      handleKeyUp: function(event) {
+        if (event.which === 13) {
+            var x = this.$.inputField.value;
+            var val = this.$.items.querySelector('option[value="' + x + '"]');
+            console.log(x, val, 'option[value="' + x + '"]');
+            var endval = val.getAttribute('id');
+            this.selectedId = endval;
+        }
+      },
+      observe: {
+        '$.getitems.response': 'triggerResponseChange'
       },
       // instance of the element is created
       created: function() { },
@@ -33,10 +49,27 @@
       // instance was removed from the document
       leftView: function() { },
       // attribute added, removed or updated
-      attributeChanged: function(attrName, oldVal, newVal) { },
+      attributeChanged: function(attrName, oldVal, newVal) {
+        this.field = newVal;
+      },
+      triggerResponseChange: function(oldVal, newVal) {
+        this.items = newVal;
+      },
       handleResponse: function() {
-        this.projects = this.response;
-      }
+        this.items = this.response;
+        this.fieldValues = [];
+
+        for(var i=0;i<this.items.length;i++){
+            var obj = this.items[i];
+
+                var attrKey = obj[this.keyfield];
+                var attrValue = obj[this.valuefield];
+                console.log(attrValue);
+                this.fieldValues.push({ key: attrKey, value: attrValue});
+            }
+            this.fieldValues.sort();
+            console.log(this.fieldValues);
+        },
     });
   </script>
 </polymer-element>
