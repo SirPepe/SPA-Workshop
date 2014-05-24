@@ -3,17 +3,17 @@
 
 <polymer-element name="employee-projecttime"  attributes="employeeId piechartsize">
   <template>
-  <core-ajax auto 
+  <core-ajax auto
     id="Workitems"
-    url="http://0.0.0.0:1337/workitems?employee_id={{employeeId}}"
+    url="http://127.0.0.1:1337/workitems?employee_id={{employeeId}}"
     handleAs="json"
   />
     <style>
       /* styles for the custom element itself - lowest specificity */
       :host { display: block; }
-      /* 
+      /*
       style if an ancestor has the different class
-      :host(.different) { } 
+      :host(.different) { }
       */
     </style>
     <span>Projektzeitverteilung:<span>
@@ -30,11 +30,11 @@
       times: [],
 
       // element is fully prepared
-      ready: function(){ 
+      ready: function(){
 
       },
       observe: {
-        '$.Workitems.response': 'triggerChangeEvent' 
+        '$.Workitems.response': 'triggerChangeEvent'
       },
       triggerChangeEvent: function(oldVal, workitems) {
         if (workitems != null) {
@@ -43,7 +43,7 @@
             if (typeof data[wi.project_id] === "undefined") {
               data[wi.project_id] = 0;
             }
-            data[wi.project_id] += wi.time;
+            data[wi.project_id] += parseInt(wi.time);
           });
         }
 
