@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MIZE</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <style type="text/css">
+        .rowItem {
+
+        }
+    </style>
+
+    <script src="bower_components/platform/platform.js"></script>
+    <link rel="import" href="elements/list-json.html">
+    <link rel="import" href="elements/form-module.html">
+    <link rel="import" href="elements/render-employee.html">
+
+    <link rel="import" href="bower_components/x-route/src/x-route.html">
+    <link rel="import" href="elements/x-route-page.html">
+
+    <link rel="import" href="elements/employee-projecttime.html">
+
+</head>
+<body>
+
+    <x-route path="/employees" route="/employees" auto/>
+    <x-route path="/projects"/>
+    <x-route path="/workitems"/>
+    <x-route path="/newworkitem"/>
+    <x-route path="/statistics"/>
+    <x-route path="/about"/>
+
+    <div class="container">
+        <div class="header">
+            <ul class="nav nav-pills pull-right">
+                <li class="active"><a href="#/employees">Employees</a></li>
+                <li><a href="#/projects">Projects</a></li>
+                <li><a href="#/workitems">Workitems</a></li>
+                <li><a href="#/newworkitem">New Workitems</a></li>
+                <li><a href="#/statistics">Statistics</a></li>
+                <li><a href="#/about">About</a></li>
+            </ul>
+            <h3 class="text-muted">Zeiterfassung</h3>
+        </div>
+
+        <x-route-page id="employees">
+        <h1>Employees</h1>
+        <dl class="container">
+            <list-json url="http://localhost:1337/employees" sortBy="name" ascending="true">
+            <template>
+                <dd class="row">
+                    <div class="col-md-3">{{item.name}}</div>
+                    <div class="col-md-3">{{item.email}}</div>
+                    <div class="col-md-3">{{item.company}}</div>
+                    <div class="col-md-3"><employee-projecttime employeeId="{{item._id}}"></employee-projecttime></div>
+                </dd>
+            </template>
+        </list-json>
+    </dl>
+</x-route-page>
+
+<x-route-page id="projects">
+<h1>Projects</h1>
+<dl class="container">
+    <list-json url="http://localhost:1337/projects" sortBy="name" ascending="true">
+        <template>
+            <dd class="row">
+                <div class="col-md-4">{{item.title}}</div>
+                <div class="col-md-8">{{item.client}}</div>
+            </dd>
+        </template>
+    </list-json>
+</dl>
+</x-route-page>
+
+<x-route-page id="workitems">
+<h1>Workitems</h1>
+<dl class="container">
+    <list-json url="http://localhost:1337/workitems" sortBy="name" ascending="true">
+    <template>
+        <dd class="row">
+            <div class="col-md-4">{{item.description}}</div>
+            <div class="col-md-4">{{item.start_date}}</div>
+            <div class="col-md-4">{{item.time}}</div>
+        </dd>
+    </template>
+</list-json>
+</dl>
+</x-route-page>
+
+<x-route-page id="newworkitem">
+    <h1>New Workitem</h1>
+    <form-module></form-module>
+</x-route-page>
+
+<x-route-page id="statistics">
+
+    <h1>Statistics</h1>
+    <employee-projecttime employeeId="Ei6znekIZzo7IKBD"></employee-projecttime>
+</x-route-page>
+</div>
+
+<x-route-page id="about">
+
+    <h1>About</h1>
+    <p>Die neue Zeiterfassung</p>
+</x-route-page>
+</div>
+
+<script>
+document.addEventListener('WebComponentsReady', function() {
+            // Perform some behaviour
+        });
+
+document.addEventListener('route-changed', function(route){
+
+    var routePages = document.querySelectorAll('x-route-page');
+    console.dir(routePages);
+    for (var i = 0; i < routePages.length; i++) {
+        console.dir(routePages[i]);
+        routePages[i].setAttribute('hidden', '');
+    }
+
+    var links = document.querySelectorAll('.nav li a');
+    console.dir(links);
+    for (var i = 0; i < links.length; i++) {
+        console.dir(links[i]);
+
+        if (links[i].href.indexOf(route.detail[0]) > -1)
+            links[i].parentNode.classList.add('active');
+        else
+            links[i].parentNode.classList.remove('active');
+    }
+
+    var newPage = document.getElementById(route.detail);
+    newPage.removeAttribute('hidden');
+
+
+
+    console.dir(route);
+});
+</script>
+
+</body>
+</html>

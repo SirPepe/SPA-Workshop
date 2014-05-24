@@ -1,0 +1,25 @@
+{
+  "name": "SPA-Workshop",
+  "version": "0.0.0",
+  "homepage": "https://github.com/SirPepe/SPA-Workshop",
+  "authors": [
+    "makzr <markus.koelzer@gmail.com>"
+  ],
+  "main": "app/index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1",
+    "polymer": "Polymer/polymer#~0.2.4",
+    "core-ajax": "Polymer/core-ajax#~0.2.4",
+    "svg-piechart": "*",
+    "x-route": "*"
+  }
+}

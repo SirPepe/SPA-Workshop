@@ -4,11 +4,10 @@ var restify = require('restify');
 var server = restify.createServer();
 var NeDB = require('nedb');
 
-
-var projectsDb = new NeDB();
-var employeesDb = new NeDB();
-var workitemsDb = new NeDB();
-
+var projectsDb = new NeDB({ filename: 'data/projects.db', autoload: true });
+var employeesDb = new NeDB({ filename: 'data/employees.db', autoload: true });
+var workitemsDb = new NeDB({ filename: 'data/workitems.db', autoload: true });
+var contractsDb = new NeDB({ filename: 'data/contracts.db', autoload: true });
 
 server.use(restify.CORS());
 server.pre(restify.pre.userAgentConnection());
@@ -16,16 +15,25 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.bodyParser());
 server.use(restify.queryParser());
 
-
 // Statische Fake-Daten um z.B. projects und employees importieren
 function importData(db, sourcefile, done){
-  fs.readFile(sourcefile, { encoding: 'utf-8' }, function(err, json){
-    if(err){
-      throw err;
-    }
-    var data = JSON.parse(json);
-    db.insert(data, done);
-  });
+    db.count({}, function (err, count) {
+        if(err){
+            throw err;
+        }
+        if(count > 0) {
+            done();
+        }
+        else {
+            fs.readFile(sourcefile, { encoding: 'utf-8' }, function(err, json){
+                if(err){
+                    throw err;
+                }
+                var data = JSON.parse(json);
+                db.insert(data, done);
+            });
+        }
+    });
 }
 
 function getMultiHandler(req, res, next, err, doc){
@@ -87,7 +95,7 @@ function getWorkitemsQuery(urlQuery)
     var query = new Object();
     if(defined(urlQuery.employee_id))
     {
-        query.employee_id = parseInt(urlQuery.employee_id);
+        query.employee_id = urlQuery.employee_id;
     }
     if(defined(urlQuery.min_start_date) && defined(urlQuery.max_start_date))
     {
@@ -102,7 +110,8 @@ function getWorkitemsQuery(urlQuery)
 async.parallel([
   importData.bind(null, projectsDb, __dirname + '/projects.json'),
   importData.bind(null, employeesDb, __dirname + '/employees.json'),
-  importData.bind(null, workitemsDb, __dirname + '/workitems.json')
+  importData.bind(null, workitemsDb, __dirname + '/workitems.json'),
+  importData.bind(null, contractsDb, __dirname + '/contracts.json')
 ], function(){
 
   server.get('/echo', function(req, res, next){
@@ -150,7 +159,9 @@ async.parallel([
         res.send(500, err);
         console.log('Fehler 500: ', err);
       }
+      console.log('Stored workItem for project',doc.project_id);
       res.send(201, newDoc);
+
       return next();
     });
   });
@@ -181,6 +192,15 @@ async.parallel([
       res.send(200, num);
       return next();
     });
+  });
+
+    server.get('/contracts', function(req, res, next){
+    contractsDb.find(req.query, getMultiHandler.bind(null, req, res, next));
+  });
+
+  server.get('/contracts/:_id', function(req, res, next){
+    contractsDb.find({ _id: req.params._id },
+      getSingleHandler.bind(null, req, res, next));
   });
 
 });
