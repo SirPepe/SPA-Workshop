@@ -1,0 +1,56 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+
+<polymer-element name="list-json" attributes="url reversed">
+  <template>
+    <core-ajax auto 
+	id="AjaxTag"
+	url="{{url}}"
+	handleAs="json" />  
+    <div id="container">
+    </div>
+  </template>
+  <script>
+    Polymer('list-json', {
+		ready: function() {
+			this.jsonArray = [];
+			this.templateString = this.querySelector("template").innerHTML;
+		},
+		reversed : false,
+		reversedChanged: function(oldVal, newVal) {
+			console.log(oldVal, newVal, this.reversed);
+			if (this.reversed == oldVal)
+			{
+				return;
+			}
+			this.jsonArray.reverse();
+		},
+		observe: {
+			'$.AjaxTag.response': 'triggerResponseChange'
+		},
+		triggerResponseChange: function(oldVal, newVal) {
+			var self = this;
+			if (newVal == null)
+			{
+				return;
+			}
+			if (this.reversed)
+			{
+				this.jsonArray = newVal.reverse();
+			}
+			else
+			{
+				this.jsonArray = newVal;
+			}
+			this.jsonArray.forEach(function(item) {
+				var itemHtml = self.templateString;
+				Object.keys(item).forEach(function(key) {
+					itemHtml = itemHtml.replace("{{item." + key + "}}", item[key]);
+				});
+				
+				self.$.container.innerHTML += itemHtml;
+			});
+		}
+    });
+  </script>
+</polymer-element>
