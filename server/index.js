@@ -159,7 +159,9 @@ async.parallel([
         res.send(500, err);
         console.log('Fehler 500: ', err);
       }
+      console.log('Stored workItem for project',doc.project_id);
       res.send(201, newDoc);
+      
       return next();
     });
   });

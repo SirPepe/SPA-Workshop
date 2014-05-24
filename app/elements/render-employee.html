@@ -1,13 +1,16 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../bower_components/svg-piechart/svg-piechart.html">
+<link rel="import" href="employee-projecttime.html">
 
 <polymer-element name="render-employee" attributes="employee">
   <template>
-    <span>{{employee.name}}: {{employee.email}}</span>
+    <span>{{employee.name}}: {{employee.email}}</span><br/>
+	<employee-projecttime piechartsize="100" employeeId="{{employee._id}}"></employee-projecttime>
   </template>
   <script>
     Polymer('render-employee', {
-      ready: function() {
+      ready: function() {      		
       }
     });
   </script>
