@@ -9,11 +9,18 @@
     <hr>
 
     <div class="row">
-        <form on-submit="{{submitMe}}" class="form-horizontal" role="form">
+        <form id="formmask" on-submit="{{submitMe}}" class="form-horizontal" role="form">
             <div class="form-group">
                 <label class="col-lg-3 control-label">Project</label>
                 <div class="col-lg-8">
-                    <project-selection value="{{project_id}}" readonly="{{view}}" id="ps" url="http://127.0.0.1:1337/projects" value="" valuefield="title" keyfield="_id"></project-selection>
+                    <project-selection
+                        readonly="{{view}}"
+                        id="ps"
+                        url="http://127.0.0.1:1337/projects"
+                        value="{{storeProject}}"
+                        valuefield="title"
+                        keyfield="_id">
+                    </project-selection>
                 </div>
             </div>
             <div class="form-group">
@@ -43,7 +50,14 @@
                 <label class="col-lg-3 control-label">Contract:</label>
 
                 <div class="col-lg-8">
-                    <project-selection readonly="{{view}}" id="cs" url="http://127.0.0.1:1337/contracts" valuefield="contract_name" keyfield="contract_id"></project-selection>
+                    <project-selection
+                        readonly="{{view}}"
+                        id="cs"
+                        url="http://127.0.0.1:1337/contracts"
+                        value="{{storeContract}}"
+                        valuefield="contract_name"
+                        keyfield="contract_id">
+                    </project-selection>
                 </div>
             </div>
             <div class="form-group">
@@ -114,6 +128,7 @@
             event.preventDefault();
             this.storeProject = this.$.ps.value;
             this.storeContract = this.$.cs.value;
+
             this.$.ac.go();
       }
     });

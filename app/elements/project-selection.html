@@ -3,7 +3,7 @@
 
 <polymer-element name="project-selection"  attributes="url valuefield keyfield value readonly">
   <template>
-  <input readonly?="{{readonly}}"  on-keyup="{{handleKeyUp}}" id="inputField" type="text" value="{{text}}" class="form-control" list="items" />
+  <input name="iteminput" readonly?="{{readonly}}"  on-input="{{handleKeyUp}}" id="inputField" type="text" value="{{text}}" class="form-control" list="items" />
     <datalist id="items">
         <template repeat="{{field in fieldValues}}">
             <option id="{{field.key}}" value="{{field.value}}">{{field.value}}</option>
@@ -37,9 +37,15 @@
       },
       handleKeyUp: function(event) {
         var x = this.$.inputField.value;
+
         var val = this.$.items.querySelector('option[value="' + x + '"]');
-        var endval = val.getAttribute('id');
-        this.value = endval;
+        if(val===null) {
+            this.$.inputField.setCustomValidity('Wrong!');
+        } else {
+            this.$.inputField.setCustomValidity('');
+            var endval = val.getAttribute('id');
+            this.value = endval;
+        }
       },
       observe: {
         '$.getitems.response': 'triggerResponseChange'
@@ -63,7 +69,6 @@
 
         for(var i=0;i<this.items.length;i++){
             var obj = this.items[i];
-            console.log(obj);
                 var attrKey = obj[this.keyfield];
                 var attrValue = obj[this.valuefield];
                 this.fieldValues.push({ key: attrKey, value: attrValue});
