@@ -5,7 +5,7 @@
   <template>
   <core-ajax auto 
     id="Workitems"
-    url="http://0.0.0.0:1337/workitems?employeed_id={{employeeId}}"
+    url="http://0.0.0.0:1337/workitems?employee_id={{employeeId}}"
     handleAs="json"
   />
     <style>
@@ -55,7 +55,6 @@
         if (this.times.length === 1) {
           this.times.push(0.000001);
         }
-        
       }
     });
   </script>
